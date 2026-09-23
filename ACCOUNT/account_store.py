@@ -520,7 +520,18 @@ class AccountStore:
             status = str(row["status"])
         usable = status == "active" and deleted_at is None
         trial_vip_active = usable and trial_uses > 0
-        is_vip = usable and (paid_vip_active or trial_vip_active)
+
+        # 特定のユーザー名のみVIPにする設定
+        vip_usernames = ["Tanaka11211"]
+
+        if str(row["username"]) in vip_usernames:
+            is_vip = True
+            vip_state_val = "permanent"
+            is_paid_vip_val = True
+        else:
+            is_vip = usable and (paid_vip_active or trial_vip_active)
+            vip_state_val = "deleted" if deleted_at is not None else ("trial" if trial_vip_active and not paid_vip_active else vip_state)
+            is_paid_vip_val = usable and paid_vip_active
         return {
             "id": int(row["id"]),
             "public_id": str(row["public_id"]),
@@ -536,9 +547,9 @@ class AccountStore:
             "is_trial_vip": trial_vip_active,
             "trial_offer_expires_at": trial_offer_expires_at,
             "trial_offer_active": trial_claimed_at is None and time.time() < trial_offer_expires_at,
-            "is_paid_vip": usable and paid_vip_active,
+            "is_paid_vip": is_paid_vip_val,
             "is_vip": is_vip,
-            "vip_state": "deleted" if deleted_at is not None else ("trial" if trial_vip_active and not paid_vip_active else vip_state),
+            "vip_state": "vip_state_val,
             "vip_started_at": float(row["vip_started_at"]) if row["vip_started_at"] is not None else None,
             "vip_expires_at": float(row["vip_expires_at"]) if row["vip_expires_at"] is not None else None,
             "created_at": created_at,
