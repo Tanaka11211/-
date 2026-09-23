@@ -524,14 +524,9 @@ class AccountStore:
         # 特定のユーザー名のみVIPにする設定
         vip_usernames = ["Tanaka11211"]
 
-        if str(row["username"]) in vip_usernames:
             is_vip = True
-            vip_state_val = "permanent"
-            is_paid_vip_val = True
-        else:
-            is_vip = usable and (paid_vip_active or trial_vip_active)
-            vip_state_val = "deleted" if deleted_at is not None else ("trial" if trial_vip_active and not paid_vip_active else vip_state)
-            is_paid_vip_val = usable and paid_vip_active
+           vip_state_val = "permanent"
+           is_paid_vip_val = True
         return {
             "id": int(row["id"]),
             "public_id": str(row["public_id"]),
