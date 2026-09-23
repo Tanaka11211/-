@@ -523,10 +523,9 @@ class AccountStore:
 
         # 特定のユーザー名のみVIPにする設定
         vip_usernames = ["Tanaka11211"]
-
-            is_vip = True
-           vip_state_val = "permanent"
-           is_paid_vip_val = True
+is_vip = True
+vip_state_val = "permanent"
+is_paid_vip_val = True
         return {
             "id": int(row["id"]),
             "public_id": str(row["public_id"]),
